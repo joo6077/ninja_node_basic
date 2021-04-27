@@ -23,6 +23,23 @@ app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.use(morgan('dev'))
 
+
+// blog routes
+
+app.get('/blogs', (req, res) => {
+    Blog.find()
+        .then((result) => {
+            res.render('index', { title: 'All Blogs', blogs: result })
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+})
+
+app.get('/blogs/create', (req, res) => {
+    res.render('create', { title: 'Create a new Blog' })
+})
+
 // mongoose and mongo sandbox routes
 app.get('/add-blog', (req, res) => {
     const blog = new Blog({
@@ -41,7 +58,7 @@ app.get('/add-blog', (req, res) => {
 })
 
 app.get('/all-blogs', (req, res) => {
-    Blog.find()
+    Blog.find().sort({ createdAt: -1 })
         .then((result) => {
             res.send(result)
         })
@@ -60,16 +77,19 @@ app.get('/single-blog', (req, res) => {
         })
 })
 
+
+// routes
 app.get('/', (req, res) => {
     // res.send('<p>home page</p>')
     // absolute root
     // res.sendFile('./views/index.html', { root: __dirname })
-    const blogs = [
-        {title: 'Yoshi finds eggs', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-        {title: 'Mario finds stars', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-        {title: 'How to defeat bowser', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-    ]
-    res.render('index', { title: 'Home', blogs })
+    // const blogs = [
+    //     {title: 'Yoshi finds eggs', snippet: 'Lorem ipsum dolor sit amet consectetur'},
+    //     {title: 'Mario finds stars', snippet: 'Lorem ipsum dolor sit amet consectetur'},
+    //     {title: 'How to defeat bowser', snippet: 'Lorem ipsum dolor sit amet consectetur'},
+    // ]
+    // res.render('index', { title: 'Home', blogs })
+    res.redirect('/blogs')
 })
 
 app.get('/about', (req, res) => {
@@ -82,10 +102,6 @@ app.get('/about', (req, res) => {
 // app.get('/about-us', (req, res) => {
 //     res.redirect('/about')
 // })
-
-app.get('/blogs/create', (req, res) => {
-    res.render('create', { title: 'Create a new Blog' })
-})
 
 
 // 404 page
