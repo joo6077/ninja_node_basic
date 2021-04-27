@@ -40,7 +40,25 @@ app.get('/add-blog', (req, res) => {
         })
 })
 
+app.get('/all-blogs', (req, res) => {
+    Blog.find()
+        .then((result) => {
+            res.send(result)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+})
 
+app.get('/single-blog', (req, res) => {
+    Blog.findById('6087bcfa7c786713c8d3a4f2')
+        .then((result) => {
+            res.send(result)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+})
 
 app.get('/', (req, res) => {
     // res.send('<p>home page</p>')
